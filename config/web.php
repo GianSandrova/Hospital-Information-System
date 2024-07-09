@@ -21,6 +21,9 @@ $config = [
         'akun' => [
             'class' => 'app\modules\akun\Module',
         ],
+        'profile' => [
+            'class' => 'app\modules\profile\Module',
+        ],
     ],
     'components' => [
         'request' => [
@@ -71,6 +74,7 @@ $config = [
                     ],
                 ],
                 'akun/change-password/<userId:\d+>' => 'akun/change-password/index',
+                'PUT profile/update/<id:\d+>' => 'profile/update/index',
             ],
         ],
         
