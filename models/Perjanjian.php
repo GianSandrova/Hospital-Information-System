@@ -19,8 +19,8 @@ use Yii;
  * @property string|null $status
  * @property bool|null $is_delete
  *
- * @property Faske $faskes
- * @property RekamMedi $rekamMedis
+ * @property Faskes $faskes
+ * @property RekamMedis $rekamMedis
  */
 class Perjanjian extends \yii\db\ActiveRecord
 {
@@ -44,8 +44,8 @@ class Perjanjian extends \yii\db\ActiveRecord
             [['is_delete'], 'boolean'],
             [['kode_booking', 'poli', 'dokter', 'jadwal', 'status'], 'string', 'max' => 255],
             [['no_antrian'], 'string', 'max' => 5],
-            [['faskes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faske::class, 'targetAttribute' => ['faskes_id' => 'id']],
-            [['rekam_medis_id'], 'exist', 'skipOnError' => true, 'targetClass' => RekamMedi::class, 'targetAttribute' => ['rekam_medis_id' => 'id']],
+            [['faskes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faskes::class, 'targetAttribute' => ['faskes_id' => 'id']],
+            [['rekam_medis_id'], 'exist', 'skipOnError' => true, 'targetClass' => RekamMedis::class, 'targetAttribute' => ['rekam_medis_id' => 'id']],
         ];
     }
 
@@ -86,6 +86,6 @@ class Perjanjian extends \yii\db\ActiveRecord
      */
     public function getRekamMedis()
     {
-        return $this->hasOne(RekamMedi::class, ['id' => 'rekam_medis_id']);
+        return $this->hasOne(RekamMedis::class, ['id' => 'rekam_medis_id']);
     }
 }

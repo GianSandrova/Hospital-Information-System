@@ -23,7 +23,7 @@ use Yii;
  *
  * @property Endpoint[] $endpoints
  * @property Perjanjian[] $perjanjians
- * @property RekamMedi[] $rekamMedis
+ * @property RekamMedis[] $rekamMedis
  * @property Resep[] $reseps
  */
 class Faskes extends \yii\db\ActiveRecord
@@ -99,7 +99,7 @@ class Faskes extends \yii\db\ActiveRecord
      */
     public function getRekamMedis()
     {
-        return $this->hasMany(RekamMedi::class, ['faskes_id' => 'id']);
+        return $this->hasMany(RekamMedis::class, ['faskes_id' => 'id']);
     }
 
     /**

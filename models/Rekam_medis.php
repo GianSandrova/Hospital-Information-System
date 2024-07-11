@@ -12,7 +12,7 @@ use Yii;
  * @property int|null $faskes_id
  * @property string|null $no_rm
  *
- * @property Faske $faskes
+ * @property Faskes $faskes
  * @property Perjanjian[] $perjanjians
  * @property Personal $personal
  * @property Resep[] $reseps
@@ -36,7 +36,7 @@ class Rekam_medis extends \yii\db\ActiveRecord
             [['personal_id', 'faskes_id'], 'default', 'value' => null],
             [['personal_id', 'faskes_id'], 'integer'],
             [['no_rm'], 'string', 'max' => 255],
-            [['faskes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faske::class, 'targetAttribute' => ['faskes_id' => 'id']],
+            [['faskes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faskes::class, 'targetAttribute' => ['faskes_id' => 'id']],
             [['personal_id'], 'exist', 'skipOnError' => true, 'targetClass' => Personal::class, 'targetAttribute' => ['personal_id' => 'id']],
         ];
     }
@@ -61,7 +61,7 @@ class Rekam_medis extends \yii\db\ActiveRecord
      */
     public function getFaskes()
     {
-        return $this->hasOne(Faske::class, ['id' => 'faskes_id']);
+        return $this->hasOne(Faskes::class, ['id' => 'faskes_id']);
     }
 
     /**

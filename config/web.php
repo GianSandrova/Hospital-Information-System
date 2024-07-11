@@ -24,6 +24,12 @@ $config = [
         'profile' => [
             'class' => 'app\modules\profile\Module',
         ],
+        'faskes' => [
+            'class' => 'app\modules\faskes\Module',
+        ],
+        'medicalrecord' => [
+            'class' => 'app\modules\medicalrecord\Module',
+        ],
     ],
     'components' => [
         'request' => [

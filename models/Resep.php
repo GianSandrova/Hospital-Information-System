@@ -19,8 +19,8 @@ use Yii;
  * @property string|null $terakhir_minum
  * @property string|null $minum_berikutnya
  *
- * @property Faske $faskes
- * @property RekamMedi $rekamMedis
+ * @property Faskes $faskes
+ * @property RekamMedis $rekamMedis
  */
 class Resep extends \yii\db\ActiveRecord
 {
@@ -42,8 +42,8 @@ class Resep extends \yii\db\ActiveRecord
             [['faskes_id', 'rekam_medis_id', 'jumlah', 'jumlah_diminum', 'frekuensi'], 'integer'],
             [['terakhir_minum', 'minum_berikutnya'], 'safe'],
             [['kode_booking', 'nama_obat', 'signa'], 'string', 'max' => 255],
-            [['faskes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faske::class, 'targetAttribute' => ['faskes_id' => 'id']],
-            [['rekam_medis_id'], 'exist', 'skipOnError' => true, 'targetClass' => RekamMedi::class, 'targetAttribute' => ['rekam_medis_id' => 'id']],
+            [['faskes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faskes::class, 'targetAttribute' => ['faskes_id' => 'id']],
+            [['rekam_medis_id'], 'exist', 'skipOnError' => true, 'targetClass' => RekamMedis::class, 'targetAttribute' => ['rekam_medis_id' => 'id']],
         ];
     }
 
@@ -74,7 +74,7 @@ class Resep extends \yii\db\ActiveRecord
      */
     public function getFaskes()
     {
-        return $this->hasOne(Faske::class, ['id' => 'faskes_id']);
+        return $this->hasOne(Faskes::class, ['id' => 'faskes_id']);
     }
 
     /**
@@ -84,6 +84,6 @@ class Resep extends \yii\db\ActiveRecord
      */
     public function getRekamMedis()
     {
-        return $this->hasOne(RekamMedi::class, ['id' => 'rekam_medis_id']);
+        return $this->hasOne(RekamMedis::class, ['id' => 'rekam_medis_id']);
     }
 }

@@ -12,7 +12,7 @@ use Yii;
  * @property string|null $name
  * @property string|null $url
  *
- * @property Faske $faskes
+ * @property Faskes $faskes
  */
 class Endpoint extends \yii\db\ActiveRecord
 {
@@ -57,6 +57,6 @@ class Endpoint extends \yii\db\ActiveRecord
      */
     public function getFaskes()
     {
-        return $this->hasOne(Faske::class, ['id' => 'faskes_id']);
+        return $this->hasOne(Faskes::class, ['id' => 'faskes_id']);
     }
 }
