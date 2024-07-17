@@ -6,9 +6,27 @@ use yii\rest\Controller;
 use app\models\User;
 use yii\web\UnauthorizedHttpException;
 use app\models\UserSearch;
+use yii\filters\Cors;
 
 class LoginController extends Controller
 {
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['corsFilter'] = [
+            'class' => Cors::class,
+            'cors' => [
+                'Origin' => Yii::$app->params['corsOrigin'],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Credentials' => true,
+                'Access-Control-Max-Age' => 86400,
+                'Access-Control-Expose-Headers' => [],
+            ],
+        ];
+    
+        return $behaviors;
+    }
     public function actionIndex()
     {
         $email = Yii::$app->request->post('email');

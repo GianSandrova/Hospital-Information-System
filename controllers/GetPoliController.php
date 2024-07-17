@@ -19,7 +19,7 @@ class GetPoliController extends Controller{
             ])
             ->addHeaders([
                 'no_handphone' => '085271988421',
-                'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJub19oYW5kcGhvbmUiOiIwODUyNzE5ODg0MjEiLCJkYXRlIjoxNzIxMDYyODAwMDAwfQ.pRGQJBud5AOX5_AWKHfSRcNA4Npo-3FZM5IZMTnf-AI',
+                'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJub19oYW5kcGhvbmUiOiIwODUyNzE5ODg0MjEiLCJkYXRlIjoxNzIxMTQ5MjAwMDAwfQ.cxnjNVqL2KZ2HRefVV0KOv_UojosAsZFdJKZ9wDCXCg',
                 'Accept' => 'application/json',
             ])
             ->send();
