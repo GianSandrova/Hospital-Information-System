@@ -1,15 +1,20 @@
 <?php
+namespace app\modules\akun\controllers;
 
-namespace app\controllers;
-
-// use yii\web\Controller;
+use Yii;
 use yii\rest\Controller;
+use app\models\User;
+use yii\web\UnauthorizedHttpException;
+use app\models\UserSearch;
+use yii\filters\Cors;
 use yii\httpclient\Client;
 use yii\web\Response;
-use app\models\endpoint;
+use app\models\Endpoint;
 
-class GetPoliController extends Controller{
-    public function behavior(){
+class PoliController extends Controller
+{
+    public function behaviors()
+    {
         $behaviors = parent::behaviors();
         $behaviors['corsFilter'] = [
             'class' => Cors::class,
@@ -22,12 +27,10 @@ class GetPoliController extends Controller{
                 'Access-Control-Expose-Headers' => [],
             ],
         ];
-        $behaviors['authenticator'] = [
-            'class' => HttpBearerAuth::class,
-            'except' => ['options'],
-        ];
+    
         return $behaviors;
     }
+
     public function actionIndex()
     {
         \Yii::$app->response->format = Response::FORMAT_JSON;
@@ -35,9 +38,8 @@ class GetPoliController extends Controller{
         $tokenmobile = Yii::$app->request->post('tokenmobile');
         $no_telepon = Yii::$app->request->post('no_telepon');
         $faskes_id= Yii::$app->request->post('faskes_id');
-        if ($faskes_id === null) {
-            return ['error' => true, 'message' => 'faskes_id is required'];
-        }
+       
+
 
         $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id, 'name' => 'getPoli']);
         if (!$endpoint) {

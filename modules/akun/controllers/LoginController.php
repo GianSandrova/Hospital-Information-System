@@ -7,6 +7,9 @@ use app\models\User;
 use yii\web\UnauthorizedHttpException;
 use app\models\UserSearch;
 use yii\filters\Cors;
+use yii\httpclient\Client;
+use yii\web\Response;
+use app\models\Endpoint;
 
 class LoginController extends Controller
 {
@@ -27,8 +30,10 @@ class LoginController extends Controller
     
         return $behaviors;
     }
+
     public function actionIndex()
     {
+       // Yii::$app->response->format = Response::FORMAT_JSON;
         $email = Yii::$app->request->post('email');
         $password = Yii::$app->request->post('password');
 
@@ -49,6 +54,27 @@ class LoginController extends Controller
         // Save user data
         $user->save(false);
 
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('GET')
+            ->setUrl("https://demo-rs.emesys.id/app/web/index.php")
+            ->setData([
+                'r' => 'mobile/auth/login'
+            ])
+            ->addHeaders([
+                'no_handphone' => "085271988421",
+                'password' => "085271988421",
+                'Accept' => 'application/json',
+            ])
+            ->send();
+            // $responseData = $response->data[0]->response;
+            // $noTelepon = $responseData->no_telepon;
+            // ->data->no_telepon->response;
+            // $noTelepon = $responseData->no_telepon;
+// Periksa apakah $response->data adalah array dan memiliki setidaknya satu elemen
+           // Periksa apakah $response->data adalah array dan memiliki setidaknya satu elemen
+           $data = json_decode(json_encode($response->data));
+        
         return [
             'status' => 'success',
             'message' => 'Login successful',
@@ -57,6 +83,8 @@ class LoginController extends Controller
                 'username' => $user->username,
                 'email' => $user->email,
                 'access_token' => $user->auth_key,
+                'no_telepon'=>$data->response->no_telepon,
+                'token_mobile'=>$data->response->token
             ]
         ];
     }

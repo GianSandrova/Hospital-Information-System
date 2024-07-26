@@ -1,33 +1,51 @@
 <?php
-
 namespace app\controllers;
 
+use Yii;
 use yii\web\Controller;
 use yii\httpclient\Client;
 use yii\web\Response;
+use app\models\Endpoint;
 
 class GetDokterController extends Controller
 {
-    public function actionIndex()
+    public function actionIndex($faskes_id, $no_telepon , $tokenmobile )
     {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if ($faskes_id === null) {
+            return ['error' => true, 'message' => 'faskes_id is required'];
+        }
+        
+        $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id, 'name' => 'getDokter']);
+        if (!$endpoint) {
+            return ['error' => true, 'message' => 'Invalid faskes_id or endpoint not found'];
+        }
+
 
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('GET')
-            ->setUrl('https://demo-rs.emesys.id/app/web/index.php')
+            ->setUrl($endpoint -> url)
             ->setData([
                 'r' => 'mobile/service-list/get-dokter-rs'
             ])
             ->addHeaders([
-                'no_handphone' => '085271988421',
-                'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJub19oYW5kcGhvbmUiOiIwODUyNzE5ODg0MjEiLCJkYXRlIjoxNzIxMDYyODAwMDAwfQ.pRGQJBud5AOX5_AWKHfSRcNA4Npo-3FZM5IZMTnf-AI',
+                'no_handphone' => $no_telepon,
+                'token' => $tokenmobile,
                 'Accept' => 'application/json',
             ])
             ->send();
 
         if ($response->isOk) {
-            return $response->data;
+            $dokterData = $response->data;
+            
+            // // Tambahkan faskes_id ke setiap dokter
+            // foreach ($dokterData['data'] as &$dokter) {
+            //     $dokter['faskes_id'] = $faskes_id;
+            // }
+            
+            return $dokterData;
         } else {
             return [
                 'error' => true,
