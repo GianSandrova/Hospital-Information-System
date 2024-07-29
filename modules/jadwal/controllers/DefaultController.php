@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\v2\controllers;
+namespace app\modules\jadwal\controllers;
 
 use yii\web\Controller;
 

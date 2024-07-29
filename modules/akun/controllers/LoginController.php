@@ -10,6 +10,7 @@ use yii\filters\Cors;
 use yii\httpclient\Client;
 use yii\web\Response;
 use app\models\Endpoint;
+use app\helpers\login_helper;
 
 class LoginController extends Controller
 {
@@ -44,7 +45,7 @@ class LoginController extends Controller
         }
 
         // Generate access token
-        $user->auth_key = Yii::$app->security->generateRandomString();
+        $user->auth_key = login_helper::getTokenMobile($user);
         
         // Update last_login, time_login, and ip_login
         $user->last_login = date('Y-m-d H:i:s');
@@ -62,8 +63,8 @@ class LoginController extends Controller
                 'r' => 'mobile/auth/login'
             ])
             ->addHeaders([
-                'no_handphone' => "085271988421",
-                'password' => "085271988421",
+                'no_handphone' => $user->no_telepon,
+                'password' => $user->no_telepon,
                 'Accept' => 'application/json',
             ])
             ->send();

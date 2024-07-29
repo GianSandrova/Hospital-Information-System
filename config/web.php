@@ -15,8 +15,8 @@ $config = [
         'v1' => [
             'class' => 'app\modules\v1\Module',
         ],
-        'v2' => [
-            'class' => 'app\modules\v2\Module',
+        'jadwal' => [
+            'class' => 'app\modules\jadwal\Module',
         ], 
         'akun' => [
             'class' => 'app\modules\akun\Module',

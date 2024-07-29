@@ -3,6 +3,7 @@
 namespace app\modules\faskes\controllers;
 
 use Yii;
+use app\helpers\login_helper;
 use yii\rest\Controller;
 use app\models\Faskes;
 use yii\filters\auth\HttpBearerAuth;
@@ -25,19 +26,18 @@ class GetController extends Controller
                 'Access-Control-Expose-Headers' => [],
             ],
         ];
-        $behaviors['authenticator'] = [
-            'class' => HttpBearerAuth::class,
-            'except' => ['options'],
-        ];
         return $behaviors;
     }
 
     public function actionIndex($filter = null)
     {
+        $header = Yii::$app->request->post();
+        $user = login_helper::findUser($header['no_telepon']);
+        if (!empty($user)) {
+          $token = login_helper::getTokenMobile($user);
+          if ($header['token_core'] == $token) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        // Check token validation
-        if (!Yii::$app->user->isGuest) {
             // Fetch data
             $query = Faskes::find();
 
@@ -79,5 +79,5 @@ class GetController extends Controller
             ];
         }
     }
+ }
 }
-

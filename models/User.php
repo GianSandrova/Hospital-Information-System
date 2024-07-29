@@ -41,6 +41,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'in', 'range' => [10, 0]], // 10: active, 0: inactive
             ['type_user', 'in', 'range' => [1, 2]], // 1: regular user, 2: admin
             ['password', 'string', 'min' => 6],
+            ['no_telepon', 'string', 'min' => 6],
         ];
     }
 
