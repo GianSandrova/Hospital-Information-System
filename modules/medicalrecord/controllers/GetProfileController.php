@@ -52,7 +52,7 @@ class GetProfileController extends Controller
                 'faskesId' => $rm->faskes_id,
                 'no_rm' => $rm->no_rm,
                 'user_id' => $personal->user_id,
-                'relasi' => 'Diri Sendiri',
+                'relasi' => $personal->relasi,
                 'nik' => $personal->nik,
                 'nama_lengkap' => $personal->nama_lengkap,
                 'jenis_kelamin' => $personal->jenis_kelamin,

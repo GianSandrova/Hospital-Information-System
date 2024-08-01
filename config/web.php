@@ -30,6 +30,10 @@ $config = [
         'medicalrecord' => [
             'class' => 'app\modules\medicalrecord\Module',
         ],
+        'appointment' => [
+            'class' => 'app\modules\appointment\Module',
+        ],
+
     ],
     'components' => [
         'request' => [

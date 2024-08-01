@@ -57,7 +57,7 @@ class GetJadwalController extends Controller
     
         $client = new Client();
         $response = $client->createRequest()
-            ->setMethod('GET')  // Ubah metode menjadi POST
+            ->setMethod('GET')
             ->setUrl($url)
             ->addHeaders([
                 'no_handphone' => $no_telepon,

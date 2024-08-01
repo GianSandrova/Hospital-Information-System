@@ -45,7 +45,7 @@ class Perjanjian extends \yii\db\ActiveRecord
             [['kode_booking', 'poli', 'dokter', 'jadwal', 'status'], 'string', 'max' => 255],
             [['no_antrian'], 'string', 'max' => 5],
             [['faskes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faskes::class, 'targetAttribute' => ['faskes_id' => 'id']],
-            [['rekam_medis_id'], 'exist', 'skipOnError' => true, 'targetClass' => RekamMedis::class, 'targetAttribute' => ['rekam_medis_id' => 'id']],
+            [['rekam_medis_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rekam_medis::class, 'targetAttribute' => ['rekam_medis_id' => 'id']],
         ];
     }
 
@@ -76,7 +76,7 @@ class Perjanjian extends \yii\db\ActiveRecord
      */
     public function getFaskes()
     {
-        return $this->hasOne(Faske::class, ['id' => 'faskes_id']);
+        return $this->hasOne(Faskes::class, ['id' => 'faskes_id']);
     }
 
     /**
@@ -86,6 +86,6 @@ class Perjanjian extends \yii\db\ActiveRecord
      */
     public function getRekamMedis()
     {
-        return $this->hasOne(RekamMedis::class, ['id' => 'rekam_medis_id']);
+        return $this->hasOne(Rekam_medis::class, ['id' => 'rekam_medis_id']);
     }
 }

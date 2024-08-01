@@ -21,7 +21,7 @@ use yii\validators\Validator;
  * @property string|null $relasi
  * @property string|null $email
  *
- * @property RekamMedis[] $rekamMedis
+ * @property Rekam_medis[] $rekamMedis
  * @property User $user
  */
 class Personal extends \yii\db\ActiveRecord
@@ -84,7 +84,7 @@ class Personal extends \yii\db\ActiveRecord
      */
     public function getRekamMedis()
     {
-        return $this->hasMany(RekamMedis::class, ['personal_id' => 'id']);
+        return $this->hasMany(Rekam_medis::class, ['personal_id' => 'id']);
     }
 
     /**

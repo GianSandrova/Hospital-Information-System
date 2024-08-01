@@ -32,6 +32,7 @@ class GetController extends Controller
     public function actionIndex($filter = null)
     {
         $header = Yii::$app->request->post();
+        
         $user = login_helper::findUser($header['no_telepon']);
         if (!empty($user)) {
           $token = login_helper::getTokenMobile($user);
