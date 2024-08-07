@@ -33,10 +33,10 @@ class GetController extends Controller
     {
         $header = Yii::$app->request->post();
         
-        $user = login_helper::findUser($header['no_telepon']);
-        if (!empty($user)) {
-          $token = login_helper::getTokenMobile($user);
-          if ($header['token_core'] == $token) {
+        // $user = login_helper::findUser($header['no_telepon']);
+        // if (!empty($user)) {
+        //   $token = login_helper::getTokenMobile($user);
+        //   if ($header['token_core'] == $token) {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
             // Fetch data
@@ -73,12 +73,12 @@ class GetController extends Controller
                     'message' => 'Faskes Tidak Ditemukan',
                 ];
             }
-        } else {
-            return [
-                'code' => 401,
-                'message' => 'Token Expired',
-            ];
-        }
-    }
+        // } else {
+        //     return [
+        //         'code' => 401,
+        //         'message' => 'Token Expired',
+        //     ];
+        // }
+    // }
  }
 }

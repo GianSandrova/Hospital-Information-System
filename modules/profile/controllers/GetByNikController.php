@@ -3,14 +3,14 @@
 namespace app\modules\profile\controllers;
 
 use Yii;
-use yii\rest\Controller;
 use app\helpers\login_helper;
+use yii\rest\Controller;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Personal;
 use yii\web\NotFoundHttpException;
 use yii\filters\Cors;
 
-class RemoveController extends Controller
+class GetByNikController extends Controller
 {
     public function behaviors()
     {
@@ -29,7 +29,7 @@ class RemoveController extends Controller
         return $behaviors;
     }
 
-    public function actionIndex()
+    public function actionIndex($nik)
     {
         $header = Yii::$app->request->post();
         if (!isset($header['no_telepon']) || !isset($header['token_core'])) {
@@ -57,48 +57,39 @@ class RemoveController extends Controller
                 'message' => 'Invalid token',
             ];
         }
-
-
+    
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-        $request = Yii::$app->request;
-        $id = $request->post('id');
-
-        if (!$id) {
+    
+        $profile = Personal::findOne(['nik' => $nik, 'user_id' => $user->id]);
+    
+        if (!$profile) {
             return [
-                'code' => 400,
-                'message' => 'ID is required',
+                'success' => false,
+                'code' => 404,
+                'message' => 'Profile not found',
             ];
         }
 
-        $model = $this->findModel($id);
+        $profileData = [
+            'id' => $profile->id,
+            'user_id' => $profile->user_id,
+            'relasi' => $profile->relasi,
+            'nik' => $profile->nik,
+            'nama_lengkap' => $profile->nama_lengkap,
+            'jenis_kelamin' => $profile->jenis_kelamin,
+            'tanggal_lahir' => $profile->tanggal_lahir,
+            'tempat_lahir' => $profile->tempat_lahir,
+            'no_hp' => $profile->no_hp,
+            'no_wa' => $profile->no_wa,
+            'email' => $profile->email,
+        ];
 
-        // if ($model->user_id !== Yii::$app->user->id) {
-        //     return [
-        //         'code' => 403,
-        //         'message' => 'You are not allowed to delete this profile',
-        //     ];
-        // }
-
-        if ($model->delete()) {
-            return [
-                'code' => 200,
-                'message' => 'Profile Deleted',
-            ];
-        } else {
-            return [
-                'code' => 412,
-                'message' => 'Profile Deleted Failed',
-            ];
-        }
+        return [
+            'code' => 200,
+            'message' => 'Success',
+            'data' => $profileData,
+        ];
     }
 
-    protected function findModel($id)
-    {
-        if (($model = Personal::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested profile does not exist.');
-    }
+    
 }

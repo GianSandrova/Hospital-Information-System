@@ -3,15 +3,14 @@
 namespace app\modules\appointment\controllers;
 
 use app\helpers\login_helper;
-use yii;
+use Yii;
 use yii\rest\Controller;
 use yii\httpclient\Client;
 use yii\web\Response;
 use app\models\endpoint;
 use yii\filters\Cors;
-use yii\filters\auth\HttpBearerAuth;
 
-class AddController extends Controller
+class BatalPerjanjianController extends Controller
 {
     public function behaviors()
     {
@@ -39,12 +38,10 @@ class AddController extends Controller
             if ($requestData['token_core'] == $tokenCore) {
                 Yii::$app->response->format = Response::FORMAT_JSON;
          
-                $tokenMobile = $requestData['token'];
-                $no_telepon = $requestData['no_handphone'];
+                $no_handphone = $requestData['no_handphone'];
+                $id_perjanjian = $requestData['id_perjanjian'];
+                $token = $requestData['token'];
                 $faskes_id = $requestData['id_faskes'] ?? null;
-                $id_jadwal_praktek = $requestData['id_jadwal_praktek'];
-                $no_rm = $requestData['no_rm'];
-                $waktu_jadwal_perjanjian = $requestData['waktu_registrasi_perjanjian'];
         
                 if ($faskes_id === null) {
                     return ['error' => true, 'message' => 'faskes_id is required'];
@@ -55,7 +52,7 @@ class AddController extends Controller
                     return ['error' => true, 'message' => 'Invalid faskes_id or endpoint not found'];
                 }
         
-                $url = $endpoint->url . '?r=mobile/service-post-umum/ambil-perjanjian';
+                $url = $endpoint->url . '?r=mobile/service-post-umum/batal-perjanjian';
         
                 $client = new Client();
                 $response = $client->createRequest()
@@ -63,14 +60,9 @@ class AddController extends Controller
                     ->setUrl($url)
                     ->setFormat(Client::FORMAT_JSON)
                     ->setData([
-                        'no_handphone' => $no_telepon,
-                        'token' => $tokenMobile,
-                        'id_jadwal_praktek' => $id_jadwal_praktek,
-                        'waktu_registrasi_perjanjian' => $waktu_jadwal_perjanjian,
-                        'no_rm'=>$no_rm
-                    ])
-                    ->addHeaders([
-                        'Accept' => 'application/json',
+                        'no_handphone' => $no_handphone,
+                        'id_perjanjian' => $id_perjanjian,
+                        'token' => $token,
                     ])
                     ->send();
         
@@ -83,7 +75,7 @@ class AddController extends Controller
                 } else {
                     return [
                         'error' => true,
-                        'message' => 'Gagal mengambil data jadwal',
+                        'message' => 'Gagal membatalkan perjanjian',
                         'status' => $response->statusCode,
                         'details' => $response->content
                     ];

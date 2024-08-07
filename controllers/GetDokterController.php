@@ -17,7 +17,7 @@ class GetDokterController extends Controller
             return ['error' => true, 'message' => 'faskes_id is required'];
         }
         
-        $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id, 'name' => 'getDokter']);
+        $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id]);
         if (!$endpoint) {
             return ['error' => true, 'message' => 'Invalid faskes_id or endpoint not found'];
         }
@@ -39,11 +39,6 @@ class GetDokterController extends Controller
 
         if ($response->isOk) {
             $dokterData = $response->data;
-            
-            // // Tambahkan faskes_id ke setiap dokter
-            // foreach ($dokterData['data'] as &$dokter) {
-            //     $dokter['faskes_id'] = $faskes_id;
-            // }
             
             return $dokterData;
         } else {

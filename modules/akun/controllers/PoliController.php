@@ -35,13 +35,13 @@ class PoliController extends Controller
     {
         \Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $tokenmobile = Yii::$app->request->post('tokenmobile');
-        $no_telepon = Yii::$app->request->post('no_telepon');
+        // $tokenmobile = Yii::$app->request->post('tokenmobile');
+        // $no_telepon = Yii::$app->request->post('no_telepon');
         $faskes_id= Yii::$app->request->post('faskes_id');
        
 
 
-        $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id, 'name' => 'getPoli']);
+        $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id]);
         if (!$endpoint) {
             return ['error' => true, 'message' => 'Invalid faskes_id or endpoint not found'];
         }
@@ -51,11 +51,11 @@ class PoliController extends Controller
             ->setMethod('GET')
             ->setUrl($endpoint -> url)
             ->setData([
-                'r'=>'mobile/service-list/get-poli-rs'
+                'r'=>'mobile/service-list-umum/get-poli-rs'
             ])
             ->addHeaders([
-                'no_handphone' => $no_telepon,
-                'token' => $tokenmobile,
+                // 'no_handphone' => $no_telepon,
+                // 'token' => $tokenmobile,
                 'Accept' => 'application/json',
             ])
             ->send();
@@ -66,7 +66,7 @@ class PoliController extends Controller
             return [
                 'error' => true,
                 'message' => 'Gagal mengambil data poli',
-                'details' => $response->content
+                'details' => $response
             ];
         }
     }

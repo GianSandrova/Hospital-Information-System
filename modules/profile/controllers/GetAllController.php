@@ -77,6 +77,7 @@ class GetAllController extends Controller
             $profileData[] = [
                 'id' => $profile->id,
                 'user_id' => $profile->user_id,
+                'no_rm' => $profile->no_rm,
                 'relasi' => $profile->relasi,
                 'nik' => $profile->nik,
                 'nama_lengkap' => $profile->nama_lengkap,

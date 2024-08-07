@@ -48,7 +48,7 @@ class GetJadwalController extends Controller
             return ['error' => true, 'message' => 'faskes_id is required'];
         }
     
-        $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id, 'name' => 'getJadwal']);
+        $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id]);
         if (!$endpoint) {
             return ['error' => true, 'message' => 'Invalid faskes_id or endpoint not found'];
         }

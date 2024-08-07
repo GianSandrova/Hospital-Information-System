@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\validators\Validator;
 
 /**
  * This is the model class for table "{{%personal}}".
@@ -20,6 +19,7 @@ use yii\validators\Validator;
  * @property bool|null $is_delete
  * @property string|null $relasi
  * @property string|null $email
+ * @property int|null $id_pasienuser
  *
  * @property Rekam_medis[] $rekamMedis
  * @property User $user
@@ -40,17 +40,18 @@ class Personal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'default', 'value' => null],
-            [['user_id'], 'integer'],
+            [['user_id', 'id_pasienuser'], 'integer'],
             [['is_delete'], 'boolean'],
             [['nik'], 'string', 'max' => 16],
-            [['nik'], 'match', 'pattern' => '/^[0-9]{16}$/', 'message' => 'NIK harus 16 karakter berupa angka'],
-            [['nama_lengkap', 'tanggal_lahir', 'tempat_lahir', 'no_hp', 'no_wa', 'relasi', 'email'], 'string', 'max' => 255],
+            // [['nik'], 'match', 'pattern' => '/^[0-9]{16}$/', 'message' => 'NIK harus 16 karakter berupa angka'],
+            [['nama_lengkap', 'tanggal_lahir', 'tempat_lahir', 'no_hp','no_rm', 'no_wa', 'relasi', 'email','no_hp'], 'string', 'max' => 255],
+            // [['nama_lengkap', 'tanggal_lahir', 'tempat_lahir', 'no_hp', 'no_wa', 'relasi', 'email'], 'string', 'max' => 255],
+
             [['jenis_kelamin'], 'string', 'max' => 10],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
-            [['nik', 'nama_lengkap', 'jenis_kelamin', 'tanggal_lahir', 'no_hp', 'no_wa', 'relasi', 'email'], 'required'],
+            [['nik', 'nama_lengkap', 'jenis_kelamin', 'tanggal_lahir', 'no_hp'], 'required'],
             [['email'], 'email'],
-            [['no_hp', 'no_wa'], 'match', 'pattern' => '/^[0-9]+$/', 'message' => 'Hanya boleh berisi angka'],
+            // [['no_hp', 'no_wa'], 'match',a'],
             [['tanggal_lahir'], 'date', 'format' => 'php:Y-m-d'],
             [['relasi'], 'validateRelasi'],
         ];
@@ -74,6 +75,7 @@ class Personal extends \yii\db\ActiveRecord
             'is_delete' => 'Is Delete',
             'relasi' => 'Relasi',
             'email' => 'Email',
+            'id_pasienuser' => 'ID Pasien',
         ];
     }
 
