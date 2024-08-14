@@ -49,7 +49,7 @@ class Personal extends \yii\db\ActiveRecord
 
             [['jenis_kelamin'], 'string', 'max' => 10],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
-            [['nik', 'nama_lengkap', 'jenis_kelamin', 'tanggal_lahir', 'no_hp'], 'required'],
+            // [['nik', 'nama_lengkap', 'jenis_kelamin', 'tanggal_lahir', 'no_hp'], 'required'],
             [['email'], 'email'],
             // [['no_hp', 'no_wa'], 'match',a'],
             [['tanggal_lahir'], 'date', 'format' => 'php:Y-m-d'],

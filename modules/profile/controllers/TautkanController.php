@@ -10,6 +10,7 @@ use yii\httpclient\Client;
 use yii\web\Response;
 use app\models\Endpoint;
 use app\models\Personal;
+use app\models\Rekam_medis;
 use app\models\User;
 
 class TautkanController extends Controller
@@ -66,13 +67,14 @@ class TautkanController extends Controller
                 ->addHeaders([
                     'no_handphone' => $no_telepon,
                     'nik' => $nik,
+                    'type'=>$type,
                     'Accept' => 'application/json',
                 ])
                 ->send();
-
-            if ($response->isOk) {
-                $responseData = json_decode($response->content, true);
-                $patientData = $responseData['data'] ?? [];
+                if ($response->isOk) {
+                    $responseData = json_decode($response->content, true);
+                    $patientData = $responseData['data'] ?? [];
+                    // return $responseData;
 
                 $model = new Personal();
 
@@ -85,15 +87,6 @@ class TautkanController extends Controller
                 $model->user_id = $find_user ? $find_user->id : null;
                 // $model->id_pasienuser = $patientData['id_pasien'] ?? null;
 
-                // // Mengambil nomor HP dari array kontak
-                // if (isset($patientData['kontak']) && is_array($patientData['kontak'])) {
-                //     foreach ($patientData['kontak'] as $contact) {
-                //         if ($contact['jenis_kontak'] == 'No Handphone') {
-                //             $model->no_hp = $contact['kontak'];
-                //             break;
-                //         }
-                //     }
-                // }
 
 
                 // Mengatur atribut lain yang diperlukan
@@ -104,6 +97,12 @@ class TautkanController extends Controller
 
 
                 if ($model->save()) {
+
+                    $rekam_medis= new Rekam_medis();
+                    $rekam_medis->personal_id = $model->id;
+                    $rekam_medis->faskes_id =$faskes_id;
+                    $rekam_medis->no_rm = strval($patientData['id_pasien'] ?? null);
+                    $rekam_medis->save();
                     return [
                         'success' => true,
                         'data' => [
@@ -182,7 +181,7 @@ class TautkanController extends Controller
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id, 'name' => 'getId']);
+        $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id]);
         if (!$endpoint) {
             return ['success' => false, 'data' => ['code' => 400, 'message' => 'Invalid faskes_id or endpoint not found']];
         }

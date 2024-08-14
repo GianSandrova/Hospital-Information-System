@@ -31,18 +31,11 @@ class GetJadwalController extends Controller
     }
     
     public function actionJadwal()
-  {
-    $header = Yii::$app->request->post();
-    $user = login_helper::findUser($header['no_telepon']);
-    if (!empty($user)) {
-      $token = login_helper::getTokenMobile($user);
-      if ($header['token_core'] == $token) {
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
-     
-        $tokenmobile = Yii::$app->request->post('tokenmobile');
-        $no_telepon = Yii::$app->request->post('no_telepon');
-        $faskes_id = Yii::$app->request->post('id_faskes');
-        $id_departemen = Yii::$app->request->post('id_departemen');
+    
+        $id_departemen = Yii::$app->request->get('id_departemen');
+        $faskes_id = Yii::$app->request->get('id_faskes');
     
         if ($faskes_id === null) {
             return ['error' => true, 'message' => 'faskes_id is required'];
@@ -60,9 +53,7 @@ class GetJadwalController extends Controller
             ->setMethod('GET')
             ->setUrl($url)
             ->addHeaders([
-                'no_handphone' => $no_telepon,
-                'token' => $tokenmobile,
-                'id_departemen'=>$id_departemen,
+                'id_departemen' => $id_departemen,
                 'Accept' => 'application/json',
             ])
             ->send();
@@ -89,44 +80,8 @@ class GetJadwalController extends Controller
                 'details' => substr($response->content, 0, 500)
             ];
         }
-      } else {
-        $response = [
-          'metadata' => [
-            'message' => 'Token sudah expired!',
-            'code' => 401
-          ]
-        ];
-      }
-    } else {
-      $response = [
-        'metadata' => [
-          'message' => 'No Handphone tidak ditemukan pada database!',
-          'code' => 201
-        ]
-      ];
     }
-    return $response;
-  }
-    // public function behaviors()
-    // {
-    //     $behaviors = parent::behaviors();
-    //     $behaviors['corsFilter'] = [
-    //         'class' => Cors::class,
-    //         'cors' => [
-    //             'Origin' => Yii::$app->params['corsOrigin'],
-    //             'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-    //             'Access-Control-Request-Headers' => ['*'],
-    //             'Access-Control-Allow-Credentials' => true,
-    //             'Access-Control-Max-Age' => 86400,
-    //             'Access-Control-Expose-Headers' => [],
-    //         ],
-    //     ];
-    //     // $behaviors['authenticator'] = [
-    //     //     'class' => HttpBearerAuth::class,
-    //     //     'except' => ['options'],
-    //     // ];
-    //     return $behaviors;
-    // }
+
 
     public function actionIndex()
     {

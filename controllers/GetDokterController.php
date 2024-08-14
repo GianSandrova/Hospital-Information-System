@@ -9,7 +9,7 @@ use app\models\Endpoint;
 
 class GetDokterController extends Controller
 {
-    public function actionIndex($faskes_id, $no_telepon , $tokenmobile )
+    public function actionIndex($faskes_id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -28,11 +28,9 @@ class GetDokterController extends Controller
             ->setMethod('GET')
             ->setUrl($endpoint -> url)
             ->setData([
-                'r' => 'mobile/service-list/get-dokter-rs'
+                'r' => 'mobile/service-list-umum/get-dokter-rs'
             ])
             ->addHeaders([
-                'no_handphone' => $no_telepon,
-                'token' => $tokenmobile,
                 'Accept' => 'application/json',
             ])
             ->send();

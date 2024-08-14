@@ -27,7 +27,7 @@ class RegistrasiController extends ActiveController
         $data = Yii::$app->getRequest()->getBodyParams();
         
         // Memastikan hanya atribut yang diizinkan yang diproses
-        $safeAttributes = ['username', 'email', 'password'];
+        $safeAttributes = ['username', 'email', 'password','no_telepon'];
         foreach ($data as $key => $value) {
             if (!in_array($key, $safeAttributes)) {
                 unset($data[$key]);
@@ -44,9 +44,7 @@ class RegistrasiController extends ActiveController
                         'id' => $model->id,
                         'username' => $model->username,
                         'email' => $model->email,
-                        'status' => $model->status,
-                        'type_user' => $model->type_user,
-                        'created_at' => $model->created_at,
+                        'no_telepon'=> $model -> no_telepon,
                     ]
                 ];
             } else {

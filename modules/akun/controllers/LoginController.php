@@ -64,16 +64,11 @@ class LoginController extends Controller
             ])
             ->addHeaders([
                 'no_handphone' => $user->no_telepon,
-                'password' => $user->no_telepon,
+                'password' => $password,
                 'Accept' => 'application/json',
             ])
             ->send();
-            // $responseData = $response->data[0]->response;
-            // $noTelepon = $responseData->no_telepon;
-            // ->data->no_telepon->response;
-            // $noTelepon = $responseData->no_telepon;
-// Periksa apakah $response->data adalah array dan memiliki setidaknya satu elemen
-           // Periksa apakah $response->data adalah array dan memiliki setidaknya satu elemen
+
            $data = json_decode(json_encode($response->data));
         
         return [
@@ -90,13 +85,4 @@ class LoginController extends Controller
         ];
     }
 
-    public function actionTampil()
-    {
-        // $searchModel = new UserSearch();
-        // $dataProvider = $searchModel->search($this->request->queryParams);
-    
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
-        // echo "<h1>Debug: Before Render</h1>";
-        return $this->render('index');
-    }
 }
