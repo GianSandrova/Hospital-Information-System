@@ -26,37 +26,14 @@ class AddController extends Controller
                 'Access-Control-Expose-Headers' => [],
             ],
         ];
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::class,
+        ];
         return $behaviors;
     }
 
     public function actionIndex()
     {
-        $header = Yii::$app->request->post();
-        if (!isset($header['no_telepon']) || !isset($header['token_core'])) {
-            return [
-                'success' => false,
-                'code' => 400,
-                'message' => 'Missing required parameters',
-            ];
-        }
-    
-        $user = login_helper::findUser($header['no_telepon']);
-        if (empty($user)) {
-            return [
-                'success' => false,
-                'code' => 404,
-                'message' => 'User not found',
-            ];
-        }
-    
-        $token = login_helper::getTokenMobile($user);
-        if ($header['token_core'] !== $token) {
-            return [
-                'success' => false,
-                'code' => 401,
-                'message' => 'Invalid token',
-            ];
-        }
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $request = Yii::$app->request;
@@ -73,7 +50,7 @@ class AddController extends Controller
                     [
                         'id' => $model->id,
                         'user_id' => $model->user_id,
-                        'no_rm'=>$model->id_pasien,
+                        'no_rm'=>$model->id_pasienuser,
                         'relasi' => $model->relasi,
                         'nik' => $model->nik,
                         'nama_lengkap' => $model->nama_lengkap,

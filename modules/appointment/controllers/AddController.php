@@ -33,14 +33,14 @@ class AddController extends Controller
     public function actionIndex()
     {
         $requestData = Yii::$app->request->post();
-        $user = login_helper::findUser($requestData['no_handphone']);
+        $user = login_helper::findUser($requestData['username']);
         if (!empty($user)) {
             $tokenCore = login_helper::getTokenMobile($user);
             if ($requestData['token_core'] == $tokenCore) {
                 Yii::$app->response->format = Response::FORMAT_JSON;
          
-                $tokenMobile = $requestData['token'];
-                $no_telepon = $requestData['no_handphone'];
+                // $tokenMobile = $requestData['token'];
+                // $no_telepon = $requestData['no_handphone'];
                 $faskes_id = $requestData['id_faskes'] ?? null;
                 $id_jadwal_praktek = $requestData['id_jadwal_praktek'];
                 $no_rm = $requestData['no_rm'];
@@ -63,8 +63,8 @@ class AddController extends Controller
                     ->setUrl($url)
                     ->setFormat(Client::FORMAT_JSON)
                     ->setData([
-                        'no_handphone' => $no_telepon,
-                        'token' => $tokenMobile,
+                        'username' => $endpoint->faskes->user_api,
+                        'token' => $endpoint->faskes->token_mobile,
                         'id_jadwal_praktek' => $id_jadwal_praktek,
                         'waktu_registrasi_perjanjian' => $waktu_jadwal_perjanjian,
                         'no_rm'=>$no_rm

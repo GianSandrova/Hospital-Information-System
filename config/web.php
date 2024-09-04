@@ -36,6 +36,15 @@ $config = [
 
     ],
     'components' => [
+
+        'mailer' => [
+            'class' => 'yii\symfonymailer\Mailer',
+            'useFileTransport' => false,
+            'transport' => [
+                'dsn' => 'smtp://gian.sandrova@gmail.com:wfdkiqpcsmhxxznm@smtp.gmail.com:587',
+            ],
+        ],    
+
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'A9CJxRx157T0AqR9bf5d779b_aYDSaT5',
@@ -102,9 +111,9 @@ $config = [
             ],
         ],
         
-        
     ],
     'params' => $params,
+    'defaultRoute' => 'site/login',
 ];
 
 if (YII_ENV_DEV) {

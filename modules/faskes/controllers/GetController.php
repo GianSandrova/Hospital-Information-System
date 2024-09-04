@@ -57,8 +57,8 @@ class GetController extends Controller
                         'alamat' => $f->alamat,
                         'deskripsi' => $f->deskripsi,
                         'logo' => $f->logo,
-                        'longitud' => $f->longtitud,
-                        'latitud' => $f->latitude,
+                        'longitude' => $f->longtitud,
+                        'latitude' => $f->latitude,
                     ];
                 }
 
@@ -73,12 +73,5 @@ class GetController extends Controller
                     'message' => 'Faskes Tidak Ditemukan',
                 ];
             }
-        // } else {
-        //     return [
-        //         'code' => 401,
-        //         'message' => 'Token Expired',
-        //     ];
-        // }
-    // }
  }
 }

@@ -8,7 +8,7 @@ class login_helper{
     public static function getTokenMobile($user)
     {
         $header_encode = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
-        $payload = json_encode(['no_handphone' => $user->no_telepon, 'date' => strtotime(date('Y-m-d')) * 1000]);
+        $payload = json_encode(['no_handphone' => $user->username, 'date' => strtotime(date('Y-m-d')) * 1000]);
         $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header_encode));
         $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
         $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, 'abC123!', true);
@@ -16,8 +16,7 @@ class login_helper{
         $token = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
         return $token;
     }
-    public static function findUser($no_handphone){
-        return User::find()->where(['no_telepon'=>$no_handphone])->one();
-
+    public static function findUser($username){
+        return User::find()->where(['username'=>$username])->one();
     }
 }

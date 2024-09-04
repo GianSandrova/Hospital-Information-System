@@ -29,6 +29,17 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function setPassword($password)
+    {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+    }
+    
+    public function removePasswordResetToken()
+    {
+        $this->password_reset_token = null;
+        $this->password_reset_token_expire = null;
+    }
+
     public function rules()
     {
         return [

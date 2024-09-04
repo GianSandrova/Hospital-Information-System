@@ -32,7 +32,7 @@ class GetAllController extends Controller
     public function actionIndex()
     {
         $header = Yii::$app->request->post();
-        if (!isset($header['no_telepon']) || !isset($header['token_core'])) {
+        if (!isset($header['token_core'])) {
             return [
                 'success' => false,
                 'code' => 400,
@@ -40,7 +40,7 @@ class GetAllController extends Controller
             ];
         }
     
-        $user = login_helper::findUser($header['no_telepon']);
+        $user = login_helper::findUser($header['username']);
         if (empty($user)) {
             return [
                 'success' => false,
@@ -60,8 +60,10 @@ class GetAllController extends Controller
     
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     
+        // Menambahkan kondisi untuk mengecualikan status 'Menunggu Persetujuan'
         $profiles = Personal::find()
-            ->where(['user_id' => $user->id])  // Use $user->id instead of Yii::$app->user->id
+            ->where(['user_id' => $user->id])
+            ->andWhere(['!=', 'status', 'Menunggu Persetujuan'])  // Kondisi tambahan
             ->all();
     
         if (empty($profiles)) {
@@ -69,6 +71,76 @@ class GetAllController extends Controller
                 'success' => false,
                 'code' => 404,
                 'message' => 'No profiles found for this user',
+            ];
+        }
+    
+        $profileData = [];
+        foreach ($profiles as $profile) {
+            $profileData[] = [
+                'id' => $profile->id,
+                'user_id' => $profile->user_id,
+                'no_rm' => $profile->no_rm,
+                'relasi' => $profile->relasi,
+                'nik' => $profile->nik,
+                'nama_lengkap' => $profile->nama_lengkap,
+                'jenis_kelamin' => $profile->jenis_kelamin,
+                'tanggal_lahir' => $profile->tanggal_lahir,
+                'tempat_lahir' => $profile->tempat_lahir,
+                'no_hp' => $profile->no_hp,
+                'no_wa' => $profile->no_wa,
+                'email' => $profile->email,
+            ];
+        }
+    
+        return [
+            'code' => 200,
+            'message' => 'Success',
+            'data' => $profileData,
+        ];
+    }
+
+    public function actionPendingApproval()
+    {
+        $header = Yii::$app->request->post();
+        if (!isset($header['token_core'])) {
+            return [
+                'success' => false,
+                'code' => 400,
+                'message' => 'Missing required parameters',
+            ];
+        }
+
+        $user = login_helper::findUser($header['username']);
+        if (empty($user)) {
+            return [
+                'success' => false,
+                'code' => 404,
+                'message' => 'User not found',
+            ];
+        }
+
+        $token = login_helper::getTokenMobile($user);
+        if ($header['token_core'] !== $token) {
+            return [
+                'success' => false,
+                'code' => 401,
+                'message' => 'Invalid token',
+            ];
+        }
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        // Mengambil data dengan status 'Menunggu Persetujuan'
+        $profiles = Personal::find()
+            ->where(['user_id' => $user->id])
+            ->andWhere(['status' => 'Menunggu Persetujuan'])  // Kondisi status 'Menunggu Persetujuan'
+            ->all();
+
+        if (empty($profiles)) {
+            return [
+                'success' => false,
+                'code' => 404,
+                'message' => 'No profiles found with pending approval status',
             ];
         }
 
@@ -96,4 +168,5 @@ class GetAllController extends Controller
             'data' => $profileData,
         ];
     }
+    
 }

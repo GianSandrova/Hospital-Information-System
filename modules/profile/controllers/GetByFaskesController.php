@@ -30,7 +30,7 @@ class GetByFaskesController extends Controller
     public function actionIndex($faskes_id)
     {
         $header = Yii::$app->request->post();
-        if (!isset($header['no_telepon']) || !isset($header['token_core'])) {
+        if (!isset($header['token_core'])) {
             return [
                 'success' => false,
                 'code' => 400,
@@ -38,7 +38,7 @@ class GetByFaskesController extends Controller
             ];
         }
     
-        $user = login_helper::findUser($header['no_telepon']);
+        $user = login_helper::findUser($header['username']);
         if (empty($user)) {
             return [
                 'success' => false,
@@ -58,7 +58,11 @@ class GetByFaskesController extends Controller
     
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        $rekamMedisRecords = Rekam_medis::findAll(['faskes_id' => $faskes_id]);
+        $rekamMedisRecords = Rekam_medis::find()
+            ->joinWith('personal')
+            ->where(['rekam_medis.faskes_id' => $faskes_id])
+            ->andWhere(['personal.user_id' => $user->id])
+            ->all();
     
         if (empty($rekamMedisRecords)) {
             return [

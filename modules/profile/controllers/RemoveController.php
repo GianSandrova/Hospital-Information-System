@@ -7,6 +7,7 @@ use yii\rest\Controller;
 use app\helpers\login_helper;
 use yii\filters\auth\HttpBearerAuth;
 use app\models\Personal;
+use app\models\Rekam_medis;
 use yii\web\NotFoundHttpException;
 use yii\filters\Cors;
 
@@ -32,7 +33,7 @@ class RemoveController extends Controller
     public function actionIndex()
     {
         $header = Yii::$app->request->post();
-        if (!isset($header['no_telepon']) || !isset($header['token_core'])) {
+        if (!isset($header['token_core'])) {
             return [
                 'success' => false,
                 'code' => 400,
@@ -40,7 +41,7 @@ class RemoveController extends Controller
             ];
         }
     
-        $user = login_helper::findUser($header['no_telepon']);
+        $user = login_helper::findUser($header['username']);
         if (empty($user)) {
             return [
                 'success' => false,
@@ -66,6 +67,7 @@ class RemoveController extends Controller
 
         if (!$id) {
             return [
+                'success' => false,
                 'code' => 400,
                 'message' => 'ID is required',
             ];
@@ -73,22 +75,28 @@ class RemoveController extends Controller
 
         $model = $this->findModel($id);
 
-        // if ($model->user_id !== Yii::$app->user->id) {
-        //     return [
-        //         'code' => 403,
-        //         'message' => 'You are not allowed to delete this profile',
-        //     ];
-        // }
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            // First, delete related rekam_medis records
+            Rekam_medis::deleteAll(['personal_id' => $id]);
 
-        if ($model->delete()) {
+            // Then, delete the personal record
+            if ($model->delete()) {
+                $transaction->commit();
+                return [
+                    'success' => true,
+                    'code' => 200,
+                    'message' => 'Profile and related records deleted successfully',
+                ];
+            } else {
+                throw new \Exception('Failed to delete profile');
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
             return [
-                'code' => 200,
-                'message' => 'Profile Deleted',
-            ];
-        } else {
-            return [
-                'code' => 412,
-                'message' => 'Profile Deleted Failed',
+                'success' => false,
+                'code' => 500,
+                'message' => 'Failed to delete profile: ' . $e->getMessage(),
             ];
         }
     }

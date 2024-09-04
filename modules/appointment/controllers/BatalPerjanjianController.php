@@ -32,13 +32,12 @@ class BatalPerjanjianController extends Controller
     public function actionIndex()
     {
         $requestData = Yii::$app->request->post();
-        $user = login_helper::findUser($requestData['no_handphone']);
+        $user = login_helper::findUser($requestData['username']);
         if (!empty($user)) {
             $tokenCore = login_helper::getTokenMobile($user);
             if ($requestData['token_core'] == $tokenCore) {
                 Yii::$app->response->format = Response::FORMAT_JSON;
          
-                $no_handphone = $requestData['no_handphone'];
                 $id_perjanjian = $requestData['id_perjanjian'];
                 $token = $requestData['token'];
                 $faskes_id = $requestData['id_faskes'] ?? null;
@@ -60,9 +59,9 @@ class BatalPerjanjianController extends Controller
                     ->setUrl($url)
                     ->setFormat(Client::FORMAT_JSON)
                     ->setData([
-                        'no_handphone' => $no_handphone,
+                        'username' => $endpoint->faskes->user_api,
                         'id_perjanjian' => $id_perjanjian,
-                        'token' => $token,
+                        'token' => $endpoint->faskes->token_mobile,
                     ])
                     ->send();
         

@@ -39,8 +39,6 @@ class PoliController extends Controller
         // $no_telepon = Yii::$app->request->post('no_telepon');
         $faskes_id= Yii::$app->request->post('faskes_id');
        
-
-
         $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id]);
         if (!$endpoint) {
             return ['error' => true, 'message' => 'Invalid faskes_id or endpoint not found'];

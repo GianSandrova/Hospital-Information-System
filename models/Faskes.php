@@ -45,7 +45,7 @@ class Faskes extends \yii\db\ActiveRecord
             [['deskripsi'], 'string'],
             [['is_aktif', 'is_bridging'], 'boolean'],
             [['client_id'], 'string', 'max' => 20],
-            [['nama_faskes', 'alamat', 'logo', 'user_api', 'password_api', 'longtitud', 'latitude'], 'string', 'max' => 255],
+            [['nama_faskes', 'alamat', 'logo', 'user_api', 'password_api', 'longtitud', 'latitude','token_mobile'], 'string', 'max' => 255],
             [['ip_address'], 'string', 'max' => 15],
         ];
     }
@@ -99,7 +99,7 @@ class Faskes extends \yii\db\ActiveRecord
      */
     public function getRekamMedis()
     {
-        return $this->hasMany(RekamMedis::class, ['faskes_id' => 'id']);
+        return $this->hasMany(Rekam_medis::class, ['faskes_id' => 'id']);
     }
 
     /**

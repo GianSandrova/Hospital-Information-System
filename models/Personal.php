@@ -44,7 +44,7 @@ class Personal extends \yii\db\ActiveRecord
             [['is_delete'], 'boolean'],
             [['nik'], 'string', 'max' => 16],
             // [['nik'], 'match', 'pattern' => '/^[0-9]{16}$/', 'message' => 'NIK harus 16 karakter berupa angka'],
-            [['nama_lengkap', 'tanggal_lahir', 'tempat_lahir', 'no_hp','no_rm', 'no_wa', 'relasi', 'email','no_hp'], 'string', 'max' => 255],
+            [['nama_lengkap', 'tanggal_lahir', 'tempat_lahir', 'no_hp','no_rm', 'no_wa', 'relasi', 'email','no_hp','status'], 'string', 'max' => 255],
             // [['nama_lengkap', 'tanggal_lahir', 'tempat_lahir', 'no_hp', 'no_wa', 'relasi', 'email'], 'string', 'max' => 255],
 
             [['jenis_kelamin'], 'string', 'max' => 10],
@@ -76,6 +76,7 @@ class Personal extends \yii\db\ActiveRecord
             'relasi' => 'Relasi',
             'email' => 'Email',
             'id_pasienuser' => 'ID Pasien',
+            'status'=>'status',
         ];
     }
 

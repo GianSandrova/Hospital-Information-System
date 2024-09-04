@@ -32,7 +32,7 @@ class GetByIdController extends Controller
     public function actionIndex($id)
     {
         $header = Yii::$app->request->post();
-        if (!isset($header['no_telepon']) || !isset($header['token_core'])) {
+        if (!isset($header['token_core'])) {
             return [
                 'success' => false,
                 'code' => 400,
@@ -40,7 +40,7 @@ class GetByIdController extends Controller
             ];
         }
     
-        $user = login_helper::findUser($header['no_telepon']);
+        $user = login_helper::findUser($header['username']);
         if (empty($user)) {
             return [
                 'success' => false,
