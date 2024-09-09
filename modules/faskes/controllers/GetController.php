@@ -8,6 +8,7 @@ use yii\rest\Controller;
 use app\models\Faskes;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;;
 use yii\filters\Cors;
 
 class GetController extends Controller
@@ -73,5 +74,63 @@ class GetController extends Controller
                     'message' => 'Faskes Tidak Ditemukan',
                 ];
             }
- }
+    }
+
+    public function actionFaskes()
+    {
+        $faskes = Faskes::find()->all();
+
+        return $this->render('faskes', [
+            'faskes' => $faskes,
+        ]);
+    }
+
+    // Create Action
+    public function actionCreate()
+    {
+        $faskes = new Faskes();
+
+        if ($faskes->load(Yii::$app->request->post()) && $faskes->save()) {
+            Yii::$app->session->setFlash('success', 'Data Faskes berhasil ditambahkan.');
+            return $this->redirect(['faskes']);
+        }
+
+        return $this->render('create', [
+            'faskes' => $faskes,
+        ]);
+    }
+
+    // Update Action
+    public function actionUpdate($id)
+    {
+        $faskes = $this->findModel($id);
+
+        if ($faskes->load(Yii::$app->request->post()) && $faskes->save()) {
+            Yii::$app->session->setFlash('success', 'Data Faskes berhasil diperbarui.');
+            return $this->redirect(['faskes']);
+        }
+
+        return $this->render('update', [
+            'faskes' => $faskes,
+        ]);
+    }
+
+    // Delete Action
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        Yii::$app->session->setFlash('success', 'Data Faskes berhasil dihapus.');
+        return $this->redirect(['faskes']);
+    }
+
+    // Find Model
+    protected function findModel($id)
+    {
+        if (($model = Faskes::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
 }

@@ -3,10 +3,12 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\AttributeBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%faskes}}".
- *
+ *  
  * @property int $id
  * @property string|null $client_id
  * @property string|null $nama_faskes
@@ -49,6 +51,33 @@ class Faskes extends \yii\db\ActiveRecord
             [['ip_address'], 'string', 'max' => 15],
         ];
     }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'client_id',
+                ],
+                'value' => function ($event) {
+                    return $this->generateClientId();
+                },
+            ],
+        ];
+    }
+
+    private function generateClientId()
+    {
+        $lastFaskes = self::find()->orderBy(['id' => SORT_DESC])->one();
+        if ($lastFaskes) {
+            $lastClientId = $lastFaskes->client_id;
+            $number = intval(substr($lastClientId, 6)) + 1;
+            return 'CLIENT' . str_pad($number, 3, '0', STR_PAD_LEFT);
+        }
+        return 'CLIENT001';
+    }
+
 
     /**
      * {@inheritdoc}

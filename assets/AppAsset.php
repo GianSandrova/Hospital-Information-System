@@ -28,7 +28,8 @@ class AppAsset extends AssetBundle
     public $js = [
         'js/sb-admin-2.min.js',
         'js/jquery.min.js',
-        'js/bootstrap.bundle.min.js'
+        'js/bootstrap.bundle.min.js',
+        'js/faskes.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
