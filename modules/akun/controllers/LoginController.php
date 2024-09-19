@@ -33,7 +33,7 @@ class LoginController extends Controller
         return $behaviors;
     }
 
-    public function actionIndex()
+    public function actionLogin()
     {
        // Yii::$app->response->format = Response::FORMAT_JSON;
         $email = Yii::$app->request->post('email');
@@ -56,7 +56,6 @@ class LoginController extends Controller
         // Save user data
         $user->save(false);
 
-        // return ['data'=>$data];
         return [
             'status' => 'success',
             'message' => 'Login successful',
@@ -69,47 +68,55 @@ class LoginController extends Controller
         ];
     }
 
-    public function actionKlinikLogin()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-    
-        $faskes_id = Yii::$app->request->post('faskes_id');
-    
-        $faskes = Faskes::findOne($faskes_id);
-        if (!$faskes) {
-            return ['error' => true, 'message' => 'Invalid faskes_id'];
-        }
-    
-        $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id]);
-        if (!$endpoint) {
-            return ['error' => true, 'message' => 'Endpoint not found for this faskes'];
-        }
-    
-        // Login to Emesys Clinic
-        $client = new Client();
-        $response = $client->createRequest()
-            ->setMethod('POST')
-            ->setUrl($endpoint->url . '?r=mobile/service-post-umum/login')
-            ->setHeaders(['Content-Type' => 'application/json'])
-            ->setContent(json_encode([
-                'username' => $faskes->user_api,
-                'password' => $faskes->password_api,
-            ]))
-            ->send();
-    
-        if (!$response->isOk) {
-            throw new UnauthorizedHttpException('Failed to authenticate with Emesys Clinic.');
-        }
-    
-        $data = json_decode(json_encode($response->data));
-        $faskes->token_mobile=$data->response->token;
-        $faskes->save(false);
-    
-        return [
-            'status' => 'success',
-            'message' => 'Faskes sudah dipilih dan login ke klinik berhasil',
-        ];
+  public function actionKlinikLogin()
+  {
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    $faskes_id = Yii::$app->request->post('faskes_id');
+
+    $faskes = Faskes::findOne($faskes_id);
+    if (!$faskes) {
+      return ['error' => true, 'message' => 'Invalid faskes_id'];
     }
+
+    $endpoint = Endpoint::findOne(['faskes_id' => $faskes_id]);
+    if (!$endpoint) {
+      return ['error' => true, 'message' => 'Endpoint not found for this faskes'];
+    }
+
+    // Login to Emesys Clinic
+    $client = new Client();
+    $response = $client->createRequest()
+      ->setMethod('POST')
+      ->setUrl($endpoint->url . '?r=mobile/service-post-umum/login')
+      ->setHeaders(['Content-Type' => 'application/json'])
+      ->setContent(json_encode([
+        'username' => $faskes->user_api,
+        'password' =>strval($faskes->password_api) ,
+      ]))
+      ->send();
+
+    if (!$response->isOk) {
+      throw new UnauthorizedHttpException('Failed to authenticate with Emesys Clinic.');
+    }
+
+    $data = json_decode(json_encode($response->data));
+    $faskes->token_mobile = $data->response->token;
+    $faskes->save(false);
+
+    return [
+      'status' => 'success',
+      'message' => 'Faskes sudah dipilih dan login ke klinik berhasil',
+      // 'username'=>$faskes->user_api,
+      // 'password'=>$faskes->password_api,
+      // 'keterangan'=>$faskes->endpo->keterangan,
+      // 'id_faskes'=>$faskes_id,
+      // 'clientid'=>$faskes->client_id,
+      // 'url'=>$faskes->endpo->url,
+      'data'=>$data,
+      // $data,
+    ];
+  }
 
     public function actionAdminLogin()
     {

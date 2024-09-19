@@ -52,18 +52,6 @@ $config = [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
-        'response' => [
-            'class' => 'yii\web\Response',
-            'on beforeSend' => function ($event) {
-                $response = $event->sender;
-                if ($response->format == \yii\web\Response::FORMAT_JSON) {
-                    $response->data = [
-                        'success' => $response->isSuccessful,
-                        'data' => $response->data,
-                    ];
-                }
-            },
-        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

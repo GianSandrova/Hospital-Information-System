@@ -7,7 +7,7 @@ use yii;
 use yii\rest\Controller;
 use yii\httpclient\Client;
 use yii\web\Response;
-use app\models\endpoint;
+use app\models\Endpoint;
 use yii\filters\Cors;
 use yii\filters\auth\HttpBearerAuth;
 
